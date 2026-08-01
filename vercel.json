@@ -1,8 +1,10 @@
 ﻿{
   "version": 2,
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/dist/unimart-frontend/browser",
   "routes": [
+    {
+      "src": "/index.html",
+      "dest": "/index.html"
+    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
