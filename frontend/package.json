@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --output-path=dist/unimart-frontend/browser",
+    "vercel-build": "npm run build",
     "test": "ng test"
   },
   "dependencies": {
