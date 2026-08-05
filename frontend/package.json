@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "ng serve",
-    "build": "ng build --output-path=dist/unimart-frontend/browser",
+    "build": "ng build --output-path=../backend/public",
     "vercel-build": "npm run build",
     "test": "ng test"
   },
