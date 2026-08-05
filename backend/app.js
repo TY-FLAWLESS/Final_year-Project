@@ -28,7 +28,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/ai', aiRoutes);
 
-const frontendBuildPath = path.resolve(__dirname, 'public', 'browser');
+const frontendBuildPath = path.resolve(__dirname, '../frontend/dist');
 
 app.use(express.static(frontendBuildPath));
 
