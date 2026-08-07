@@ -1,5 +1,4 @@
 import {
-  AuthService,
   DefaultValueAccessor,
   FormsModule,
   NgControlStatus,
@@ -11,7 +10,10 @@ import {
   SelectControlValueAccessor,
   ɵNgNoValidate,
   ɵNgSelectMultipleOption
-} from "./chunk-YHRFUBYC.js";
+} from "./chunk-R6XYI7VQ.js";
+import {
+  AuthService
+} from "./chunk-OKQBPSI6.js";
 import {
   Router,
   RouterLink
@@ -287,4 +289,4 @@ var RegisterComponent = class _RegisterComponent {
 export {
   RegisterComponent
 };
-//# sourceMappingURL=chunk-BI6JNMIU.js.map
+//# sourceMappingURL=chunk-Y2TW7MKR.js.map
