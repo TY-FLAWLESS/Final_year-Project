@@ -6,7 +6,7 @@ import {
   ɵɵelementEnd,
   ɵɵelementStart,
   ɵɵtext
-} from "./chunk-MOTHGCHO.js";
+} from "./chunk-JHEYSTBZ.js";
 
 // src/app/components/vendor-dashboard/vendor-dashboard.component.ts
 var VendorDashboardComponent = class _VendorDashboardComponent {
@@ -43,4 +43,4 @@ var VendorDashboardComponent = class _VendorDashboardComponent {
 export {
   VendorDashboardComponent
 };
-//# sourceMappingURL=chunk-P4WPRZ7W.js.map
+//# sourceMappingURL=chunk-VOKYNNZC.js.map

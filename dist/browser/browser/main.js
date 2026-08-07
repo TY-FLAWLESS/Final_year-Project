@@ -1,15 +1,14 @@
 import {
   RouterOutlet,
   bootstrapApplication,
-  provideHttpClient,
   provideRouter
-} from "./chunk-YVNP3TUU.js";
+} from "./chunk-74IGBRBX.js";
 import {
   ɵsetClassDebugInfo,
   ɵɵStandaloneFeature,
   ɵɵdefineComponent,
   ɵɵelement
-} from "./chunk-MOTHGCHO.js";
+} from "./chunk-JHEYSTBZ.js";
 
 // src/app/app.component.ts
 var AppComponent = class _AppComponent {
@@ -34,28 +33,28 @@ var AppComponent = class _AppComponent {
 var routes = [
   {
     path: "",
-    loadComponent: () => import("./chunk-4EE2YMJH.js").then((m) => m.HomeComponent)
+    loadComponent: () => import("./chunk-ISML3JWD.js").then((m) => m.HomeComponent)
   },
   {
     path: "login",
-    loadComponent: () => import("./chunk-W5YG3NSS.js").then((m) => m.LoginComponent)
+    loadComponent: () => import("./chunk-M44GB67E.js").then((m) => m.LoginComponent)
   },
   {
     path: "register",
-    loadComponent: () => import("./chunk-VRNAPBHD.js").then((m) => m.RegisterComponent)
+    loadComponent: () => import("./chunk-BI6JNMIU.js").then((m) => m.RegisterComponent)
   },
   {
     path: "admin",
-    loadComponent: () => import("./chunk-SPQGT434.js").then((m) => m.AdminDashboardComponent)
+    loadComponent: () => import("./chunk-26OQGXXB.js").then((m) => m.AdminDashboardComponent)
   },
   {
     path: "vendor",
-    loadComponent: () => import("./chunk-P4WPRZ7W.js").then((m) => m.VendorDashboardComponent)
+    loadComponent: () => import("./chunk-VOKYNNZC.js").then((m) => m.VendorDashboardComponent)
   }
 ];
 
 // src/main.ts
 bootstrapApplication(AppComponent, {
-  providers: [provideRouter(routes), provideHttpClient()]
+  providers: [provideRouter(routes)]
 }).catch((err) => console.error(err));
 //# sourceMappingURL=main.js.map

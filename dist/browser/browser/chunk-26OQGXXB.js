@@ -6,7 +6,7 @@ import {
   ɵɵelementEnd,
   ɵɵelementStart,
   ɵɵtext
-} from "./chunk-MOTHGCHO.js";
+} from "./chunk-JHEYSTBZ.js";
 
 // src/app/components/admin-dashboard/admin-dashboard.component.ts
 var AdminDashboardComponent = class _AdminDashboardComponent {
@@ -43,4 +43,4 @@ var AdminDashboardComponent = class _AdminDashboardComponent {
 export {
   AdminDashboardComponent
 };
-//# sourceMappingURL=chunk-SPQGT434.js.map
+//# sourceMappingURL=chunk-26OQGXXB.js.map
