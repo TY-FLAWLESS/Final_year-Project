@@ -38,6 +38,15 @@ export class AuthService {
     localStorage.setItem(this.storageKey, JSON.stringify(users));
   }
 
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('unimart_token');
+  }
+
+  getCurrentUser(): { name: string; email: string; role: string } | null {
+    const userJson = localStorage.getItem('unimart_user');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+
   login(payload: LoginPayload): Observable<any> {
     const users = this.getUsers();
     const user = users.find((item) => item.email.toLowerCase() === payload.email.toLowerCase());

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -15,10 +16,14 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then((m) => m.AdminDashboardComponent)
+    loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then((m) => m.AdminDashboardComponent),
+    canActivate: [AuthGuard],
+    data: { roles: ['admin'] }
   },
   {
     path: 'vendor',
-    loadComponent: () => import('./components/vendor-dashboard/vendor-dashboard.component').then((m) => m.VendorDashboardComponent)
+    loadComponent: () => import('./components/vendor-dashboard/vendor-dashboard.component').then((m) => m.VendorDashboardComponent),
+    canActivate: [AuthGuard],
+    data: { roles: ['vendor'] }
   }
 ];
