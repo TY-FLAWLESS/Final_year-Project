@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:styles/component:css;e6a0103d415b9ea1d04908993a9ba9960e6f46d7c13119b114690fabe72ded0c;C:/Users/safoo/Downloads/Final_year-Project/src/app/components/cart/cart.component.ts"],
+  "sourcesContent": ["\n      .cart-shell {\n        max-width: 1200px;\n        margin: 0 auto;\n      }\n      .cart-item {\n        border-radius: 20px;\n        background: #fff;\n      }\n      .cart-thumb {\n        width: 140px;\n        height: 140px;\n        object-fit: cover;\n        border-radius: 20px;\n        flex-shrink: 0;\n      }\n      .card {\n        border-radius: 26px;\n      }\n      @media (max-width: 767.98px) {\n        .cart-item {\n          padding: 1rem;\n        }\n        .cart-thumb {\n          width: 100%;\n          height: 220px;\n        }\n      }\n    "],
+  "mappings": ";AACM,CAAC;AACC,aAAW;AACX,UAAQ,EAAE;AACZ;AACA,CAAC;AACC,iBAAe;AACf,cAAY;AACd;AACA,CAAC;AACC,SAAO;AACP,UAAQ;AACR,cAAY;AACZ,iBAAe;AACf,eAAa;AACf;AACA,CAAC;AACC,iBAAe;AACjB;AACA,OAAO,CAAC,SAAS,EAAE;AACjB,GAfD;AAgBG,aAAS;AACX;AACA,GAdD;AAeG,WAAO;AACP,YAAQ;AACV;AACF;",
+  "names": []
+}

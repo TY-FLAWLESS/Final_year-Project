@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { CartItem, ProductService, Product } from '../../services/product.service';
 
 @Component({
   selector: 'app-home',
@@ -14,8 +17,18 @@ import { RouterLink } from '@angular/router';
           </a>
 
           <div class="topbar-actions">
-            <a class="top-link" routerLink="/login">Login</a>
-            <a class="top-cta" routerLink="/register">Join now</a>
+            <a class="top-link top-cart" routerLink="/cart">
+              <span>🛒</span>
+              Cart
+              <span class="cart-count" *ngIf="cartItems.length > 0">{{ cartItems.length }}</span>
+            </a>
+            <ng-container *ngIf="!isAuthenticated; else loggedInActions">
+              <a class="top-link" routerLink="/login">Login</a>
+              <a class="top-cta" routerLink="/register">Join now</a>
+            </ng-container>
+            <ng-template #loggedInActions>
+              <button class="top-logout" (click)="logout()">Logout</button>
+            </ng-template>
           </div>
 
           <button class="menu-toggle" type="button" (click)="toggleMenu()" aria-label="Toggle menu">
@@ -54,7 +67,7 @@ import { RouterLink } from '@angular/router';
               <div class="col-md-8">
                 <div class="search-pill d-flex align-items-center gap-2">
                   <span>🔎</span>
-                  <input type="text" class="form-control form-control-lg border-0 shadow-none" placeholder="Search for books, gadgets, fashion, food..." />
+                  <input type="text" class="form-control form-control-lg border-0 shadow-none" placeholder="Search for books, gadgets, fashion, food..." [(ngModel)]="searchQuery" (input)="searchProducts()" />
                 </div>
               </div>
               <div class="col-md-4">
@@ -72,6 +85,30 @@ import { RouterLink } from '@angular/router';
               <span class="hero-chip">Student savings</span>
               <span class="hero-chip">Campus essentials</span>
               <span class="hero-chip">Tech drop</span>
+            </div>
+
+            <div class="hero-actions mt-4 d-flex flex-wrap gap-3 align-items-center">
+              <a class="btn btn-light btn-lg rounded-pill fw-bold" routerLink="/register">Start Shopping</a>
+              <a class="btn btn-outline-light btn-lg rounded-pill fw-bold" routerLink="/login">Login to shop</a>
+              <a class="btn btn-link text-white-75" routerLink="/cart">View cart ({{ cartItems.length }})</a>
+            </div>
+
+            <div class="platform-grid mt-5">
+              <div class="platform-card p-4 bg-white bg-opacity-10 border">
+                <div class="platform-icon">⚡</div>
+                <h4 class="mb-2">Fast campus checkout</h4>
+                <p class="mb-0 text-white-75">One-click cart, saved orders, and student-friendly payment flow for faster purchasing.</p>
+              </div>
+              <div class="platform-card p-4 bg-white bg-opacity-10 border">
+                <div class="platform-icon">🛒</div>
+                <h4 class="mb-2">Cart-first shopping</h4>
+                <p class="mb-0 text-white-75">Keep items in your cart while you browse, then checkout securely from any device.</p>
+              </div>
+              <div class="platform-card p-4 bg-white bg-opacity-10 border">
+                <div class="platform-icon">✨</div>
+                <h4 class="mb-2">Smart vendor deals</h4>
+                <p class="mb-0 text-white-75">Explore curated collections from verified campus sellers and trending product drops.</p>
+              </div>
             </div>
           </div>
 
@@ -156,21 +193,20 @@ import { RouterLink } from '@angular/router';
           <p class="mb-1 text-primary fw-bold text-uppercase small">Browse categories</p>
           <h2 class="fw-bold mb-0">Popular collections</h2>
         </div>
-        <a class="text-decoration-none fw-semibold" routerLink="/register">View all categories</a>
+        <div class="d-flex gap-2 flex-wrap align-items-center">
+          <button class="btn btn-outline-secondary rounded-pill" [class.active]="selectedCategory === ''" (click)="selectCategory('')">All</button>
+          <button class="btn btn-outline-secondary rounded-pill" [class.active]="selectedCategory === 'Books & Study'" (click)="selectCategory('Books & Study')">Books</button>
+          <button class="btn btn-outline-secondary rounded-pill" [class.active]="selectedCategory === 'Tech & Gadgets'" (click)="selectCategory('Tech & Gadgets')">Tech</button>
+          <button class="btn btn-outline-secondary rounded-pill" [class.active]="selectedCategory === 'Fashion'" (click)="selectCategory('Fashion')">Fashion</button>
+          <button class="btn btn-outline-secondary rounded-pill" [class.active]="selectedCategory === 'Food & Snacks'" (click)="selectCategory('Food & Snacks')">Food</button>
+        </div>
       </div>
 
       <div class="row g-3">
-        <div class="col-6 col-md-3">
-          <div class="category-card">📚 Books & Study</div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="category-card">🎧 Tech & Gadgets</div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="category-card">🧥 Fashion</div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="category-card">🍽️ Food & Snacks</div>
+        <div class="col-6 col-md-3" *ngFor="let category of categoryChips">
+          <button class="category-card btn btn-outline-light w-100 text-start" [class.selected]="selectedCategory === category" (click)="selectCategory(category)">
+            {{ category }}
+          </button>
         </div>
       </div>
     </section>
@@ -184,87 +220,31 @@ import { RouterLink } from '@angular/router';
         <a class="btn btn-outline-primary rounded-pill px-4" routerLink="/register">Explore more</a>
       </div>
 
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-3">
+      <div class="row g-4" *ngIf="displayedProducts.length > 0; else noProducts">
+        <div class="col-md-6 col-lg-3" *ngFor="let product of displayedProducts">
           <div class="product-card h-100">
             <div class="product-image">
-              <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80" alt="AI Study Companion" />
+              <img [src]="product.imageUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80'" [alt]="product.title" />
             </div>
             <div class="p-3">
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-light text-dark">Smart series</span>
+                <span class="badge bg-light text-dark">{{ product.category }}</span>
                 <span class="text-warning">★★★★★</span>
               </div>
-              <h6 class="fw-bold mb-2">AI Study Companion</h6>
-              <p class="text-muted small mb-3">Perfect for students needing productivity and planning tools.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <strong class="text-primary">GH₵ 89</strong>
-                <a class="btn btn-sm btn-primary rounded-pill" routerLink="/login">Buy now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <div class="product-card h-100">
-            <div class="product-image">
-              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="Urban Backpack Pro" />
-            </div>
-            <div class="p-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-light text-dark">Campus favorite</span>
-                <span class="text-warning">★★★★★</span>
-              </div>
-              <h6 class="fw-bold mb-2">Urban Backpack Pro</h6>
-              <p class="text-muted small mb-3">Durable, sleek, and designed for everyday campus movement.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <strong class="text-primary">GH₵ 145</strong>
-                <a class="btn btn-sm btn-primary rounded-pill" routerLink="/login">Buy now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <div class="product-card h-100">
-            <div class="product-image">
-              <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80" alt="Fast Charge Kit" />
-            </div>
-            <div class="p-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-light text-dark">Tech drop</span>
-                <span class="text-warning">★★★★★</span>
-              </div>
-              <h6 class="fw-bold mb-2">Fast Charge Kit</h6>
-              <p class="text-muted small mb-3">Portable charger, cable set, and sleek organizer case.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <strong class="text-primary">GH₵ 72</strong>
-                <a class="btn btn-sm btn-primary rounded-pill" routerLink="/login">Buy now</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <div class="product-card h-100">
-            <div class="product-image">
-              <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80" alt="Campus Essentials Tee" />
-            </div>
-            <div class="p-3">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge bg-light text-dark">Street style</span>
-                <span class="text-warning">★★★★★</span>
-              </div>
-              <h6 class="fw-bold mb-2">Campus Essentials Tee</h6>
-              <p class="text-muted small mb-3">Modern comfort wear with everyday style and hoodie appeal.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <strong class="text-primary">GH₵ 99</strong>
-                <a class="btn btn-sm btn-primary rounded-pill" routerLink="/login">Buy now</a>
+              <h6 class="fw-bold mb-2">{{ product.title }}</h6>
+              <p class="text-muted small mb-3">{{ product.description }}</p>
+              <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                <strong class="text-primary">GH₵ {{ product.price }}</strong>
+                <button class="btn btn-sm btn-outline-primary rounded-pill" (click)="addToCart(product.id)">Add to cart</button>
+                <button class="btn btn-sm btn-primary rounded-pill" routerLink="/cart">Checkout</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <ng-template #noProducts>
+        <div class="alert alert-info">No vendor products are available yet. Vendors can post items from their dashboard.</div>
+      </ng-template>
     </section>
 
     <section class="container pb-5">
@@ -346,6 +326,40 @@ import { RouterLink } from '@angular/router';
         display: flex;
         align-items: center;
         gap: 10px;
+      }
+
+      .top-link.top-cart {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .top-link.top-cart .cart-count {
+        min-width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: #fee2e2;
+        color: #b91c1c;
+        font-size: 0.75rem;
+        font-weight: 800;
+        padding: 0 6px;
+      }
+
+      .hero-actions a.btn-link {
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      .hero-actions a.btn-link:hover {
+        color: #fff;
+        text-decoration: none;
       }
 
       .top-link,
@@ -523,6 +537,55 @@ import { RouterLink } from '@angular/router';
         letter-spacing: 0.03em;
       }
 
+      .hero-actions a.btn-link {
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      .hero-actions a.btn-link:hover {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .platform-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .platform-card {
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        transition: transform 0.25s ease, background 0.25s ease;
+      }
+
+      .platform-card:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      .platform-icon {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.18);
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+      }
+
+      .platform-card h4 {
+        color: #fff;
+        margin-bottom: 0.5rem;
+      }
+
+      .platform-card p {
+        color: rgba(255, 255, 255, 0.78);
+        line-height: 1.7;
+      }
+
       .hero-badge,
       .stat-pill,
       .search-pill,
@@ -573,6 +636,32 @@ import { RouterLink } from '@angular/router';
       .shop-panel,
       .trust-panel,
       .product-card,
+      .category-card.selected,
+      .category-card.btn.selected {
+        border-color: #3b82f6;
+        background: rgba(59, 130, 246, 0.12);
+      }
+
+      .category-card {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+        padding: 1.25rem;
+        color: #0f172a;
+        font-weight: 700;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        background: rgba(255, 255, 255, 0.9);
+        transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      }
+
+      .category-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .category-card.btn {
+        text-align: left;
+      }
       .category-card {
         background: linear-gradient(180deg, #ffffff, #f8fbff);
         color: #0f172a;
@@ -787,10 +876,26 @@ import { RouterLink } from '@angular/router';
     `
   ],
   standalone: true,
-  imports: [CommonModule, RouterLink]
+  imports: [CommonModule, FormsModule, RouterLink]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   isMenuOpen = false;
+  searchQuery = '';
+  selectedCategory = '';
+  categoryChips = ['Books & Study', 'Tech & Gadgets', 'Fashion', 'Food & Snacks'];
+  displayedProducts: Product[] = [];
+  cartItems: CartItem[] = [];
+
+  constructor(
+    private readonly productService: ProductService,
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.refreshProducts();
+    this.cartItems = this.productService.getCartItems();
+  }
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
@@ -798,5 +903,35 @@ export class HomeComponent {
 
   closeMenu(): void {
     this.isMenuOpen = false;
+  }
+
+  searchProducts(): void {
+    this.refreshProducts();
+  }
+
+  selectCategory(category: string): void {
+    this.selectedCategory = category;
+    this.refreshProducts();
+  }
+
+  refreshProducts(): void {
+    let products = this.productService.searchProducts(this.searchQuery);
+    if (this.selectedCategory) {
+      products = products.filter((product) => product.category === this.selectedCategory);
+    }
+    this.displayedProducts = products.filter((product) => product.available);
+  }
+
+  addToCart(productId: string): void {
+    this.cartItems = this.productService.addToCart(productId);
+  }
+
+  get isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

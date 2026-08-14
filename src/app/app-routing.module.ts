@@ -25,5 +25,9 @@ export const routes: Routes = [
     loadComponent: () => import('./components/vendor-dashboard/vendor-dashboard.component').then((m) => m.VendorDashboardComponent),
     canActivate: [AuthGuard],
     data: { roles: ['vendor'] }
+  },
+  {
+    path: 'cart',
+    loadComponent: () => import('./components/cart/cart.component').then((m) => m.CartComponent)
   }
 ];
