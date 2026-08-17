@@ -45,7 +45,7 @@ import {
   ɵɵdirectiveInject,
   ɵɵgetInheritedFactory,
   ɵɵlistener
-} from "./chunk-ZKHNJUVZ.js";
+} from "./chunk-RLCOLIVI.js";
 
 // node_modules/@angular/forms/fesm2022/forms.mjs
 var BaseControlValueAccessor = class _BaseControlValueAccessor {
@@ -6143,6 +6143,7 @@ var ReactiveFormsModule = class _ReactiveFormsModule {
 })();
 
 export {
+  CheckboxControlValueAccessor,
   DefaultValueAccessor,
   NgControlStatus,
   NgControlStatusGroup,
@@ -6154,6 +6155,7 @@ export {
   NgSelectOption,
   ɵNgSelectMultipleOption,
   RequiredValidator,
+  CheckboxRequiredValidator,
   FormsModule
 };
 /*! Bundled license information:
@@ -6165,4 +6167,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-V3POIQIW.js.map
+//# sourceMappingURL=chunk-VV65OK7X.js.map

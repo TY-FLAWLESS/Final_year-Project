@@ -27,7 +27,17 @@ export const routes: Routes = [
     data: { roles: ['vendor'] }
   },
   {
+    path: 'customer',
+    loadComponent: () => import('./components/customer-dashboard/customer-dashboard.component').then((m) => m.CustomerDashboardComponent),
+    canActivate: [AuthGuard],
+    data: { roles: ['customer'] }
+  },
+  {
     path: 'cart',
     loadComponent: () => import('./components/cart/cart.component').then((m) => m.CartComponent)
+  },
+  {
+    path: 'help',
+    loadComponent: () => import('./components/help/help.component').then((m) => m.HelpComponent)
   }
 ];

@@ -230,14 +230,15 @@ import { ProductService, Product, NewProduct } from '../../services/product.serv
       .stats-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1rem;
+        gap: 0.8rem;
         margin: 2rem 0;
       }
       .stat-card {
-        padding: 1.75rem;
-        border-radius: 1.75rem;
+        padding: 1.2rem;
+        border-radius: 1.5rem;
         background: rgba(15, 23, 42, 0.95);
         border: 1px solid rgba(148, 163, 184, 0.1);
+        text-align: center;
       }
       .stat-card.blue {
         background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(30, 64, 175, 0.18));
@@ -252,12 +253,17 @@ import { ProductService, Product, NewProduct } from '../../services/product.serv
         text-transform: uppercase;
         letter-spacing: 0.18em;
         color: #a5b4fc;
-        font-size: 0.78rem;
-        margin-bottom: 0.75rem;
+        font-size: 0.68rem;
+        margin-bottom: 0.5rem;
       }
       .stat-card h2 {
-        font-size: 2.35rem;
-        margin: 0;
+        font-size: 1.85rem;
+        margin: 0 0 0.4rem 0;
+      }
+      .stat-card span {
+        display: block;
+        font-size: 0.8rem;
+        color: #cbd5e1;
       }
       .dashboard-grid {
         display: grid;
@@ -478,8 +484,10 @@ export class VendorDashboardComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: () => this.router.navigate(['/login'])
+    });
   }
 
   saveAccount(): void {

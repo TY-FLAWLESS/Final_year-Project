@@ -1,5 +1,7 @@
 import {
-  AuthService,
+  AuthService
+} from "./chunk-ZCD6RBUE.js";
+import {
   Router,
   RouterOutlet,
   bootstrapApplication,
@@ -10,7 +12,7 @@ import {
   ɵɵdefineInjectable,
   ɵɵelement,
   ɵɵinject
-} from "./chunk-ZKHNJUVZ.js";
+} from "./chunk-RLCOLIVI.js";
 
 // src/app/app.component.ts
 var AppComponent = class _AppComponent {
@@ -64,31 +66,41 @@ var AuthGuard = class _AuthGuard {
 var routes = [
   {
     path: "",
-    loadComponent: () => import("./chunk-ZOYLQONB.js").then((m) => m.HomeComponent)
+    loadComponent: () => import("./chunk-7LZWPDP2.js").then((m) => m.HomeComponent)
   },
   {
     path: "login",
-    loadComponent: () => import("./chunk-7KSRLBBR.js").then((m) => m.LoginComponent)
+    loadComponent: () => import("./chunk-EQSICHVN.js").then((m) => m.LoginComponent)
   },
   {
     path: "register",
-    loadComponent: () => import("./chunk-EEACPY4N.js").then((m) => m.RegisterComponent)
+    loadComponent: () => import("./chunk-BKFMKUEJ.js").then((m) => m.RegisterComponent)
   },
   {
     path: "admin",
-    loadComponent: () => import("./chunk-VXAFW4SE.js").then((m) => m.AdminDashboardComponent),
+    loadComponent: () => import("./chunk-FQIQFDKN.js").then((m) => m.AdminDashboardComponent),
     canActivate: [AuthGuard],
     data: { roles: ["admin"] }
   },
   {
     path: "vendor",
-    loadComponent: () => import("./chunk-XSZQUR3V.js").then((m) => m.VendorDashboardComponent),
+    loadComponent: () => import("./chunk-H3ZDZ3MP.js").then((m) => m.VendorDashboardComponent),
     canActivate: [AuthGuard],
     data: { roles: ["vendor"] }
   },
   {
+    path: "customer",
+    loadComponent: () => import("./chunk-IAJX74JJ.js").then((m) => m.CustomerDashboardComponent),
+    canActivate: [AuthGuard],
+    data: { roles: ["customer"] }
+  },
+  {
     path: "cart",
-    loadComponent: () => import("./chunk-FPSCWQTR.js").then((m) => m.CartComponent)
+    loadComponent: () => import("./chunk-CZASGYWE.js").then((m) => m.CartComponent)
+  },
+  {
+    path: "help",
+    loadComponent: () => import("./chunk-JY5V26IU.js").then((m) => m.HelpComponent)
   }
 ];
 

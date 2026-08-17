@@ -2,7 +2,7 @@ import {
   __spreadProps,
   __spreadValues,
   ɵɵdefineInjectable
-} from "./chunk-ZKHNJUVZ.js";
+} from "./chunk-RLCOLIVI.js";
 
 // src/app/services/product.service.ts
 var ProductService = class _ProductService {
@@ -154,4 +154,4 @@ var ProductService = class _ProductService {
 export {
   ProductService
 };
-//# sourceMappingURL=chunk-NXEELXBY.js.map
+//# sourceMappingURL=chunk-SY7TS6UZ.js.map
